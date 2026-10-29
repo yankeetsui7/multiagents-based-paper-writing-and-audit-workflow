@@ -1,0 +1,27 @@
+{
+  "description": "V1.2 advisory startup and experiment launcher gate",
+  "hooks": {
+    "SessionStart": [{
+      "matcher": "startup|resume",
+      "hooks": [{
+        "type": "command",
+        "command": "python .codex/hooks/session_start.py",
+        "commandWindows": "py -3.14 .codex/hooks/session_start.py",
+        "timeout": 10,
+        "additionalContextLimit": 500,
+        "statusMessage": "Checking research state"
+      }]
+    }],
+    "PreToolUse": [{
+      "matcher": "Bash",
+      "hooks": [{
+        "type": "command",
+        "command": "python .codex/hooks/pre_tool_use.py",
+        "commandWindows": "py -3.14 .codex/hooks/pre_tool_use.py",
+        "timeout": 10,
+        "statusMessage": "Checking experiment gate"
+      }]
+    }]
+  }
+}
+
