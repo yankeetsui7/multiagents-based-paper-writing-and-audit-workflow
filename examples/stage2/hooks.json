@@ -1,0 +1,21 @@
+{
+  "description": "Advisory research state check at session start",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python .codex/hooks/session_start.py",
+            "commandWindows": "py -3.14 .codex/hooks/session_start.py",
+            "timeout": 10,
+            "additionalContextLimit": 500,
+            "statusMessage": "Checking research state"
+          }
+        ]
+      }
+    ]
+  }
+}
+
