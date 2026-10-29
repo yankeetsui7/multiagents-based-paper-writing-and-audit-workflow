@@ -2,7 +2,7 @@
 
 ## DEC-001
 
-- 状态：Draft / Accepted / Superseded
+- 状态：Proposed / Accepted / Superseded / Rejected
 - 决策：
 - 理由：
 - 考虑过的替代方案：
