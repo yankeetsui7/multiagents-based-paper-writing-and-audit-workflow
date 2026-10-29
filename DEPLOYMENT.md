@@ -16,6 +16,8 @@ Codex Desktop 是持续执行体，DeepSeek Harness 是无跨会话记忆的独�
 
 ## 阶段 3：逐层加入强制检查
 
+[V1.2 接入样板](examples/v1.2/research-project/)已实现针对一个标准实验启动器的 `PreToolUse` 检查及启动器内二次校验，仍需在实际科研仓库适配并做 Codex 客户端触发测试。
+
 1. `AGENTS.md` 要求加载协议、标识角色和重大变更先 Preview；这是行为规则。
 2. SessionStart 检查必需状态文件；这是启动提示，不是权限控制。
 3. 对少数确定性禁令使用 PreToolUse，例如破坏性命令或受保护文件修改；每条规则先测试正常与拒绝样例，再启用。
