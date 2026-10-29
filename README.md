@@ -31,7 +31,7 @@
 
 ## 一轮工作流
 
-完整的角色权限、Preview、每周审计、终审和额度控制见 [协作协议 V1.0](WORKFLOW.md)。
+完整的角色权限、Preview、每周审计、终审和额度控制见 [协作协议 V1.0](WORKFLOW.md)。Codex Desktop 与 DeepSeek Harness 的分阶段接入见 [部署路线](DEPLOYMENT.md)。
 
 ```text
 研究者设定研究目标、阶段任务与验收标准
