@@ -27,6 +27,10 @@ DeepSeek Harness：每周审计与最终审计，保持原有机制
 
 **严格隔离：独立 `codex exec`。** 从冻结的研究快照启动新进程，使用 `--ephemeral --sandbox read-only --ignore-user-config`，只提供最小审查材料。用 `-o` 在快照外保存报告；记录命令、计划版本和报告路径。仓库指令仍可能加载；若须隔离这些指令，另建仅含审查材料的快照。独立进程也不是完全独立的科学判断来源：同一模型家族可能保留相似偏差，所以 DeepSeek 周审和终审不取消。
 
+## V1.2：Hook 与实验启动器
+
+[V1.2 示例项目](examples/v1.2/research-project/)增加 `SessionStart` 状态提示、`PreToolUse` 对指定启动命令的检查，以及启动器内部的二次校验。两份 JSON 记录和当前计划必须有相同 SHA-256；旧计划的 PASS 和批准在计划修改后失效。示例 `run()` 尚未连接真实实验，因此不会执行实验。它是可测试的接入样板，部署到实际科研仓库前须适配实验入口和审计、批准记录的写入权限。
+
 ## 状态与审批
 
 预审报告采用 `PASS / REVISE / BLOCK / INSUFFICIENT_EVIDENCE`。只有与当前计划版本匹配的 PASS 才进入研究者 Preview；研究者批准后方可执行。`PASS` 不表示实验结果正确。预审报告留在 `audits/experiment-gates/`，计划留在 `experiments/plans/`；计划与报告应能通过版本标识对应。若将来需要硬门禁，实验启动脚本须验证当前计划版本、PASS 和人工批准记录；仅靠 `AGENTS.md` 或子 Agent 无法防止绕过。
