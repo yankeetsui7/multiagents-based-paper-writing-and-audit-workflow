@@ -21,6 +21,8 @@ dsh --profile web --dump-config
 
 如果你的 DSH 已有独立的 `audit` profile，改用 `--profile audit`，不要覆盖原来的 profile 配置。插件是本地 bundle，它的 patch 会自动装载两个 .js 插件，无需手工编辑 profile 下的 patch。
 
+> **部署源约定（第 1 点）**：`dsh plugin add` 创建的是链接，profile 加载的是链接目标，所以请把 link 指向本仓库的克隆（`git clone` 到稳定路径），不要长期依赖 `Downloads` 或临时解压目录里的副本——否则两份会漂移。完整命令与核验步骤见仓库根 `implementations/dsh-audit-local-minimal/README.md` 的「部署源」一节。
+
 **注意**：DSH 插件/Host API 尚在发展，安装可能因 `peerDependencies` 与本机版本不兼容而失败。遇到此问题请先确认 `dsh --version`，不要强制忽略依赖或安装第二份旧版 `dsh-tools`。
 
 ## 2. 启动审计（PowerShell）

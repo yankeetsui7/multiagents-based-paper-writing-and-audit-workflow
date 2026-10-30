@@ -55,6 +55,37 @@ Node.js ≥ 22。先确认版本，不要强行安装到更低版本：
 dsh --version
 ```
 
+### 部署源：让本仓库成为唯一部署源（第 1 点，推荐）
+
+`dsh plugin add <dir>` 在 profile 里创建的是指向真实目录的 **junction / 链接**，不是副本，
+profile 加载的就是链接目标。因此把链接直接指向本仓库的克隆，仓库即成为唯一部署源：
+升级是 `git pull`，回滚是 `git checkout <tag|commit>`，不必再在 `Downloads` 或临时解压
+目录里维护第二份“活目录”（两份迟早漂移，而且那份副本不在版本控制下）。
+
+```powershell
+# 1) 克隆到稳定路径（不要放 %TEMP%，也不要指向 Downloads 里的解压目录）
+git clone https://github.com/yankeetsui7/multiagents-based-paper-writing-and-audit-workflow D:\dsh-audit-workflow
+
+# 2) 两个 profile 都要改：各自有一条 link，共享同一实体
+dsh plugin --profile audit           remove dsh-audit-local-minimal
+dsh plugin --profile audit           add 'D:\dsh-audit-workflow\implementations\dsh-audit-local-minimal\plugin'
+dsh plugin --profile audit-headless  remove dsh-audit-local-minimal
+dsh plugin --profile audit-headless  add 'D:\dsh-audit-workflow\implementations\dsh-audit-local-minimal\plugin'
+
+# 3) 确认链接目标是仓库，而不是 Downloads / 临时目录
+Get-Item "$HOME\.dsh\profiles\audit\node_modules\dsh-audit-local-minimal" |
+  Select-Object FullName, LinkType, Target   # 期望 LinkType=Junction，Target=D:\dsh-audit-workflow\...
+```
+
+改完重启 DSH，再用 `dsh --profile audit --dump-config` 确认：`audit-guard` / `audit-tools`
+的 `index.js` 路径落在仓库克隆内。迁移期间的注意事项：
+
+- 链接切换前，旧实体 `Downloads\dsh-audit-minimal\dsh-audit-minimal` 仍是活部署，先别删；
+- 切换并完成一次 headless 冒烟后，旧实体与旧 ZIP 就只是历史快照，可归档（本仓库已含
+  同版本源码，且 `.ts` 已同步 fail-closed 逻辑，不必再留第二份活副本）；
+- 不要手工往 `node_modules` 里复制文件——那会删掉 junction、让两个 profile 分叉（见
+  `KNOWN_ISSUES.md` 第 1 条）。
+
 1. **创建专用 profile**（不要与日常 `desktop` / `web` 共用）：
 
    ```powershell
@@ -71,6 +102,9 @@ dsh --version
    dsh --profile audit          --dump-config   # 应出现 id: audit-guard / id: audit-tools
    dsh --profile audit-headless --dump-config
    ```
+
+   这就是上面「部署源（第 1 点）」的落地方式；如果本机已有指向 `Downloads` 的旧 link，
+   按该节的 `remove` + `add` 步骤迁移，不要保留两份活目录。
 
 3. **叠加 profile 补丁**：把 `profiles/*.cordis.patch.yml` 的内容并入对应
    `~/.dsh/profiles/<name>/cordis.patch.yml`。它们只做两件事：把默认模型改到可用的

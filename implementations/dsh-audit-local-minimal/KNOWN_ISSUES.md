@@ -68,3 +68,12 @@ fail-closed 原则参考，不要直接当配置使用。
 `plugin/scripts/*.ps1` 里 `$dsh = 'D:\DS Harness\resources\runtime\cli\bin\dsh.cmd'`
 和默认 `-Workspace` 是某台机器的本地值；移植时按本机路径修改，否则脚本直接 throw
 “dsh CLI not found”。
+
+## 11. 部署源指向 `Downloads` 会造成版本漂移
+
+本机最初把插件解压在 `C:\Users\<user>\Downloads\dsh-audit-minimal\dsh-audit-minimal`，
+两个 profile 的 junction 都指向那里。它不在版本控制下：修 bug、打补丁都是直接改这份
+活目录，于是出现了“`index.js` 已升级、`index.ts` 还停在旧版”的半次迭代（见第 4 条），
+也没有可比对的基线。**建议按 README「部署源」一节把 link 切到本仓库克隆**，让仓库成为
+唯一部署源；切换并验证前不要删旧目录，切换后旧目录与旧 ZIP 只作为历史快照归档。
+

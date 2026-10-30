@@ -40,6 +40,15 @@ DSH 侧实现，不再只是配置建议：
 
 部署与验证据录见该目录的 `README.md`、`plugin/docs/dsh-setup.md`；已知缺陷与部署陷阱见
 `KNOWN_ISSUES.md`（例如装进 `node_modules` 会破坏 junction、旧 zip 会装回无闸门版本）。
+
+**部署源约定（第 1 点）**：不要把审计插件放在 `Downloads` 或临时解压目录里当“活目录”。
+`dsh plugin add` 创建的是链接，profile 加载的是链接目标；所以让 `link:` 指向本仓库的克隆
+（`git clone` 到稳定路径，两个 profile 各做一次 `remove` + `add`），仓库就是唯一部署源：
+升级 = `git pull`，回滚 = `git checkout <tag|commit>`，不再需要第二份副本。完整命令、
+链接目标核验与迁移注意事项见
+[implementations/dsh-audit-local-minimal/README.md](implementations/dsh-audit-local-minimal/README.md)
+的「部署源」一节；迁移确认（`--dump-config` + 一次 headless 冒烟）前不要删旧实体与旧 ZIP。
+
 该实现是**工具级权限**而非操作系统沙箱，`submit_review` 的结论不替代研究者的最终裁决；
 它与上面 Codex 侧的 Hook 检查互补：Codex Hook 管执行体入口，DSH 插件管审计体出口。
 
