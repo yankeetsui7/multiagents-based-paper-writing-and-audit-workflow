@@ -1,0 +1,58 @@
+
+{
+  "policy_version": "1.0",
+  "role": "auditor",
+  "fail_closed": true,
+
+  "security": {
+    "snapshot_mode": "immutable",
+    "workspace_write": false,
+    "arbitrary_shell": false,
+    "network_tools": false,
+    "subagents": false,
+    "dynamic_plugins": false,
+    "permission_escalation": false
+  },
+
+  "tools": {
+    "default": "deny",
+    "allow": [
+      "audit_read",
+      "audit_search",
+      "audit_diff",
+      "audit_verify"
+    ]
+  },
+
+  "stages": {
+    "data_audit": {
+      "auto_review": false
+    },
+    "conclusion": {
+      "auto_review": true,
+      "review_scope": "evidence_and_findings"
+    },
+    "final": {
+      "new_session": true,
+      "tools_enabled": false
+    }
+  },
+
+  "stage_transition": "orchestrator_only",
+
+  "budget": {
+    "per_stage_tokens": 120000,
+    "max_tool_calls": 300,
+    "on_exceeded": "unknown_and_human"
+  },
+
+  "verdict": {
+    "model_output": "candidate_only",
+    "required_check_coverage": 1.0,
+    "verify_all_evidence": true,
+    "schema_error": "Unknown",
+    "integrity_error": "Unknown",
+    "incomplete_checks": "Unknown",
+    "unknown_escalation": "human"
+  }
+}

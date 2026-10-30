@@ -26,6 +26,23 @@ Codex Desktop 是持续执行体，DeepSeek Harness 是无跨会话记忆的独�
 
 不要用简单正则表达式判断“研究阶段是否改变”或“核心结论是否推翻”。这些需要研究者审批和独立审计。DeepSeek Harness 的工具、权限与插件配置应按它自己的运行环境实现，不照搬 Codex Hook 配置。
 
+## 阶段 4：DeepSeek Harness 审计端插件（可运行实现）
+
+[implementations/dsh-audit-local-minimal/](implementations/dsh-audit-local-minimal/) 给出审计端的
+DSH 侧实现，不再只是配置建议：
+
+1. `audit-guard`：在 DSH 工具流水线上 deny-by-default，只放行 `audit_diff` / `audit_read_range` /
+   `audit_search` / `submit_review`；每进程 29 次取证调用 + 1 次成功提交，预算耗尽后只接受 `Unknown`。
+2. `audit-tools`：只读固定 Git 基线、返回整文件 SHA-256、把**候选**结论写入
+   `<workspace>/.audit/reviews/`（`final_verdict_authoritative: false`）。
+3. 两个专用 profile：`audit`（交互式 Web UI）与 `audit-headless`（一次性/批处理），
+   以及启动脚本、交接包模板与 fail-closed 策略草案。
+
+部署与验证据录见该目录的 `README.md`、`plugin/docs/dsh-setup.md`；已知缺陷与部署陷阱见
+`KNOWN_ISSUES.md`（例如装进 `node_modules` 会破坏 junction、旧 zip 会装回无闸门版本）。
+该实现是**工具级权限**而非操作系统沙箱，`submit_review` 的结论不替代研究者的最终裁决；
+它与上面 Codex 侧的 Hook 检查互补：Codex Hook 管执行体入口，DSH 插件管审计体出口。
+
 ## 验收
 
 - 执行体能从状态文件恢复任务，重要决策有证据与重审条件。

@@ -1,0 +1,6 @@
+# Bundle patch. Relative module paths resolve beside this patch file.
+- insert:
+    - id: audit-guard
+      name: './plugins/audit-guard/index.js'
+    - id: audit-tools
+      name: './plugins/audit-tools/index.js'

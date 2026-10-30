@@ -1,0 +1,13 @@
+# DSH 审计专用 profile 的用户补丁层（audit profile）。
+# 该 profile 只用于科研论文 + 实验审计：只挂 audit-guard / audit-tools（由
+# dsh-audit-local-minimal bundle 注入），不要与 desktop / web 日常开发共用。
+#
+# base 层默认 agent-default-model 走 deepseek-official（需要 DEEPSEEK_API_KEY）。
+# 本机没有配置 API Key，但已有 DeepSeek 账号登录凭据，因此改走 deepseek-account 路由
+# （与 desktop profile 一致）。你若更想用 API Key，把 provider 改回 deepseek-official
+# 并在启动环境里导出 DEEPSEEK_API_KEY 即可。
+- id: agent-default-model
+  config:
+    provider: deepseek-account
+    model: deepseek-flash
+    reasoningEffort: high

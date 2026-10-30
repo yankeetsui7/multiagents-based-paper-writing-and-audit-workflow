@@ -1,0 +1,23 @@
+# audit-headless：无界面（一次性 / 批处理）审计 profile 的用户补丁层。
+# 用于 `dsh --profile audit-headless "<审计指令>"` 这种不可交互的一次性审计；
+# 交互式审计请用 `dsh audit`（web profile）。
+#
+# base 层默认 agent-default-model 走 deepseek-official（需 DEEPSEEK_API_KEY）。
+# 本机无 API Key，改走 DeepSeek 账号登录凭据（与 desktop profile 一致）。
+- id: agent-default-model
+  config:
+    provider: deepseek-account
+    model: deepseek-flash
+    reasoningEffort: high
+
+# @deepseek-ai/dsh-headless bundle 默认关闭三行「账号登录」相关插件，因为它假定
+# 无浏览器、无法登录。本机账号凭据已在 ~/.dsh/.credentials.yaml 中，重新启用即可
+# 让 deepseek-account 路由拿到 token；不启用会报 ACCOUNT_SIGN_IN_REQUIRED。
+- id: authorization
+  disabled: false
+
+- id: credentials
+  disabled: false
+
+- id: deepseek-account
+  disabled: false
