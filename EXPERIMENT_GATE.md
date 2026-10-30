@@ -23,13 +23,13 @@ DeepSeek Harness：每周审计与最终审计，保持原有机制
 
 ## 两种审查部署
 
-**试运行：项目自定义 `experiment_reviewer`。** [示例配置](examples/experiment-gate/experiment_reviewer.toml) 可放在实际研究仓库 `.codex/agents/`。新任务只传最小输入，先验证它能否发现实际方法缺陷。自定义 Agent 可关闭其记忆能力，但继承父会话权限；配置中的“不编辑”是行为约束，不是只读沙盒。
+**试运行：项目自定义 `experiment_reviewer`。** [示例配置](examples/auditor/experiment_reviewer.toml) 可放在实际研究仓库 `.codex/agents/`。新任务只传最小输入，先验证它能否发现实际方法缺陷。自定义 Agent 可关闭其记忆能力，但继承父会话权限；配置中的“不编辑”是行为约束，不是只读沙盒。
 
 **严格隔离：独立 `codex exec`。** 从冻结的研究快照启动新进程，使用 `--ephemeral --sandbox read-only --ignore-user-config`，只提供最小审查材料。用 `-o` 在快照外保存报告；记录命令、计划版本和报告路径。仓库指令仍可能加载；若须隔离这些指令，另建仅含审查材料的快照。独立进程也不是完全独立的科学判断来源：同一模型家族可能保留相似偏差，所以 DeepSeek 周审和终审不取消。
 
 ## V1.2：Hook 与实验启动器
 
-[V1.2 示例项目](examples/v1.2/research-project/)增加 `SessionStart` 状态提示、`PreToolUse` 对指定启动命令的检查，以及启动器内部的二次校验。两份 JSON 记录和当前计划必须有相同 SHA-256；旧计划的 PASS 和批准在计划修改后失效。示例 `run()` 尚未连接真实实验，因此不会执行实验。它是可测试的接入样板，部署到实际科研仓库前须适配实验入口和审计、批准记录的写入权限。
+[V1.2 示例项目](examples/executor/v1.2/research-project/)增加 `SessionStart` 状态提示、`PreToolUse` 对指定启动命令的检查，以及启动器内部的二次校验。两份 JSON 记录和当前计划必须有相同 SHA-256；旧计划的 PASS 和批准在计划修改后失效。示例 `run()` 尚未连接真实实验，因此不会执行实验。它是可测试的接入样板，部署到实际科研仓库前须适配实验入口和审计、批准记录的写入权限。
 
 ## 状态与审批
 

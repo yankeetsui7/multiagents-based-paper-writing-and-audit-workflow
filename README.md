@@ -31,7 +31,7 @@
 
 ## 一轮工作流
 
-完整的角色权限、Preview、每周审计、终审和额度控制见 [协作协议 V1.0](WORKFLOW.md)。新实验方案在人工 Preview 前增加 [预实验审查门控](EXPERIMENT_GATE.md)；[V1.2 Hook 与启动器示例](examples/v1.2/research-project/)提供可测试的命令入口检查。[已通过审查的门控实践](PASSED_GATE_CASE.md)记录一次绑定计划与 Manifest 哈希的独立 PASS 和离线复现，以及仍未解决的权限边界。Codex Desktop 与 DeepSeek Harness 的分阶段接入见 [部署路线](DEPLOYMENT.md)。
+完整的角色权限、Preview、每周审计、终审和额度控制见 [协作协议 V1.0](WORKFLOW.md)。新实验方案在人工 Preview 前增加 [预实验审查门控](EXPERIMENT_GATE.md)；[V1.2 Hook 与启动器示例](examples/executor/v1.2/research-project/)提供可测试的命令入口检查。[已通过审查的门控实践](PASSED_GATE_CASE.md)记录一次绑定计划与 Manifest 哈希的独立 PASS 和离线复现，以及仍未解决的权限边界。Codex Desktop 与 DeepSeek Harness 的分阶段接入见 [部署路线](DEPLOYMENT.md)。
 
 ```text
 研究者设定研究目标、阶段任务与验收标准
